@@ -1,36 +1,86 @@
 <template>
   <div>
-      <h2>Sign In</h2>
-
-    <form @submit.prevent="formSubmit">
-        <label for="email">Enter your email:</label>
-        <input type="email" id="email" v-model="email" />
-        <br>
-        <label for="password">Enter your password:</label>
-        <input type="password" id="password" v-model="password" />
-        <br>
-        <button type="submit" @click="signIn">Sign In</button>
-        <button @click="router.push('/auth')">Back</button>
-    </form>
+    <h2>Sign In</h2>
+    <div class="w-full max-w-xs">
+      <form
+        @submit.prevent="formSubmit"
+        class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      >
+        <div class="mb-4">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="username"
+          >
+            Username
+          </label>
+          <input
+            v-model="email"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            placeholder="email"
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            v-model="password"
+            class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="password"
+            placeholder="******************"
+          />
+          <p class="text-red-500 text-xs italic">Please choose a password.</p>
+        </div>
+        <div class="flex items-center justify-between">
+          <button
+            @click="signIn"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Sign In
+          </button>
+          <button
+            @click="router.push('/auth')"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Back
+          </button>
+        </div>
+      </form>
+      <p class="text-center text-gray-500 text-xs">
+        &copy;2020 Acme Corp. All rights reserved.
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
-import { useUserStore } from '../store/user.js'
-import { useRouter } from 'vue-router'
+import { useUserStore } from "../store/user.js";
+import { useRouter } from "vue-router";
 
 export default {
-  setup(){
-      const router = useRouter();
-      const user = useUserStore();
+  setup() {
+    const router = useRouter();
+    const user = useUserStore();
 
-      const signIn =  () => {
-          user.signIn(email.value, password.value);
+    const signIn = () => {
+      if(user.signIn(email.value, password.value)){
+        router.push({
+            path: "/",
+          });
       }
-      return{
-          router,
-          signIn,
-      }
-  }
-}
+    };
+    return {
+      router,
+      signIn,
+    };
+  },
+};
 </script>
