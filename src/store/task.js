@@ -2,22 +2,23 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { supabase } from "../supabase";
 
-const allTodos = ref([]);
+// const allTodos = ref([]);
 
 export const useTaskStore = defineStore("tasks", {
   state: () => ({
     tasks: null,
   }),
-  actions: {
+  actions: {  
     async fetchTasks() {
       const { data: tasks } = await supabase
         .from("tasks")
         .select("*")
         .order("id", { ascending: false });
       // this.tasks = tasks;
-      allTodos.value = tasks;
-      // console.log(allTodos.value);
+      // allTodos.value = tasks;
+      //  console.log(allTodos.value);
       // return allTodos;
+      return tasks;
     },
     async insertTask(title) {
       const { data, error } = await supabase.from("tasks").insert([
@@ -39,7 +40,7 @@ export const useTaskStore = defineStore("tasks", {
       const { data, error } = await supabase
         .from("tasks")
         .delete()
-        .match({id:id});
+        .match({ id: id });
     },
   },
 });

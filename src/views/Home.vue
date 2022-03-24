@@ -34,8 +34,9 @@
       </thead>
       <tbody>
         <tr>
-          <td v-for="doTask in doTasks" class="border px-4 py-2">
-            <p>{{ doTask.title.value }}</p>
+          <td><p>fake text</p></td>
+           <td v-for="printTask in printTasks" :key="printTask.id">
+            {{ printTask.title}}
           </td>
           <td class="border px-4 py-2">
             <div>
@@ -83,18 +84,25 @@
 import { useUserStore } from "../store/user.js";
 import { useTaskStore } from "../store/task.js";
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
+import { ref } from "vue";
 
 export default {
   setup() {
     const router = useRouter();
     const user = useUserStore();
-    const taskFuntion = useTaskStore();
 
-    //FETCH TASKS
-    // const doTasks = taskFuntion.fetchTasks();
-    //  console.log(taskFuntion.fetchTasks().value);
-    // console.log(doTasks[0].title.value);
+        //VARS TASKS 
+    const task = useTaskStore();
+    const printTasks = ref([]);
+
+    // FUNCTIONS
+    const doTask = async () => {
+      printTasks.value =  await task.fetchTasks();
+          // console.log(printTasks);
+      //  return printTasks;
+    };
+    doTask();
+
 
     const signOut = () => {
       user.signOut();
@@ -116,14 +124,18 @@ export default {
     };
 
     return {
-      newTask,
-      // doTasks,
+      // doTask,
       router,
       signOut,
+      newTask,
       edit,
       complete,
       deleteItem,
     };
+  },
+  mounted() {
+ 
+    
   },
 };
 </script>
