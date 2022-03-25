@@ -7,11 +7,11 @@
         Add new task
       </label>
       <input
-        v-model="task"
+        v-model="newItem"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="task"
         type="text"
-        placeholder="task ..."
+        placeholder="input"
       />
     </div>
 
@@ -33,11 +33,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><p>fake text</p></td>
-           <td v-for="printTask in printTasks" :key="printTask.id">
-            {{ printTask.title}}
-          </td>
+        <tr v-for="printTask in printTasks" :key="printTask.id">
+          <td>{{ printTask.title }}</td>
           <td class="border px-4 py-2">
             <div>
               <button
@@ -80,62 +77,46 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useUserStore } from "../store/user.js";
 import { useTaskStore } from "../store/task.js";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, reactive, computed } from "vue";
 
-export default {
-  setup() {
-    const router = useRouter();
-    const user = useUserStore();
+const router = useRouter();
+const user = useUserStore();
+const task = useTaskStore();
+const newItem = ref("");
 
-        //VARS TASKS 
-    const task = useTaskStore();
-    const printTasks = ref([]);
+const printTasks = ref([]);
 
-    // FUNCTIONS
-    const doTask = async () => {
-      printTasks.value =  await task.fetchTasks();
-          // console.log(printTasks);
-      //  return printTasks;
-    };
-    doTask();
-
-
-    const signOut = () => {
-      user.signOut();
-      router.push({
-        path: "/auth",
-      });
-    };
-    const newTask = () => {
-      taskFuntion.insertTask(task.value);
-    };
-    const edit = () => {
-      console.log("this is edit");
-    };
-    const complete = () => {
-      console.log("this is complete");
-    };
-    const deleteItem = () => {
-      console.log("this is deleteItem");
-    };
-
-    return {
-      // doTask,
-      router,
-      signOut,
-      newTask,
-      edit,
-      complete,
-      deleteItem,
-    };
-  },
-  mounted() {
- 
-    
-  },
+const doTask = async () => {
+  printTasks.value = await task.fetchTasks();
+  return printTasks;
 };
+doTask();
+
+// FUNCTIONS
+const signOut = () => {
+  user.signOut();
+  router.push({
+    path: "/auth",
+  });
+};
+const newTask = () => {
+  task.insertTask(newItem.value);
+  doTask();
+  newItem.value = "";
+};
+const edit = () => {
+  task.updateTask(newTitle.value);
+};
+const complete = () => {
+  console.log("this is complete");
+};
+const deleteItem = () => {
+  task.deleteTask();
+    doTask();
+};
+
 </script>

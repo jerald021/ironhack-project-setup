@@ -61,26 +61,25 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useUserStore } from "../store/user.js";
 import { useRouter } from "vue-router";
+import { useTaskStore } from "../store/task.js";
 
-export default {
-  setup() {
-    const router = useRouter();
-    const user = useUserStore();
+const router = useRouter();
+const user = useUserStore();
+const task = useTaskStore();
 
-    const signIn = () => {
-      if(user.signIn(email.value, password.value)){
-        router.push({
-            path: "/",
-          });
-      }
-    };
-    return {
-      router,
-      signIn,
-    };
-  },
+const fetch = async () => {
+  await task.fetchTasks();
+};
+
+const signIn = () => {
+  if (user.signIn(email.value, password.value)) {
+    router.push({
+      path: "/",
+    });
+    fetch();
+  }
 };
 </script>
