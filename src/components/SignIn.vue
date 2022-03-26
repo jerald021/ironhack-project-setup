@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h2>Sign In</h2>
+  <div class="grid place-content-center my-5">
+    <h2 class="text-2xl text-blue-800">Sign In</h2>
     <div class="w-full max-w-xs">
       <form
         @submit.prevent="formSubmit"
@@ -9,9 +9,9 @@
         <div class="mb-4">
           <label
             class="block text-gray-700 text-sm font-bold mb-2"
-            for="username"
+            for="email"
           >
-            Username
+            Email
           </label>
           <input
             v-model="email"
@@ -63,23 +63,23 @@
 
 <script setup>
 import { useUserStore } from "../store/user.js";
-import { useRouter } from "vue-router";
-import { useTaskStore } from "../store/task.js";
 
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+
+//VARS 
 const router = useRouter();
 const user = useUserStore();
-const task = useTaskStore();
 
-const fetch = async () => {
-  await task.fetchTasks();
-};
+const email = ref(null);
+const password = ref(null);
 
+//METHODS
 const signIn = () => {
   if (user.signIn(email.value, password.value)) {
     router.push({
       path: "/",
     });
-    fetch();
   }
 };
 </script>

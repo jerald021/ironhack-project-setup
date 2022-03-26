@@ -1,6 +1,6 @@
 <template>
-<div>
-    <h2>Register new user</h2>
+  <div class="grid place-content-center my-5">
+    <h2 class="text-2xl text-blue-800">Sign Up</h2>
     <div class="w-full max-w-xs">
       <form
         @submit.prevent="formSubmit"
@@ -9,16 +9,16 @@
         <div class="mb-4">
           <label
             class="block text-gray-700 text-sm font-bold mb-2"
-            for="username"
+            for="email"
           >
-            Username
+            Email
           </label>
           <input
             v-model="email"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            placeholder="Username"
+            id="email"
+            type="email"
+            placeholder="Email"
           />
         </div>
         <div class="mb-6">
@@ -55,34 +55,29 @@
         </div>
       </form>
       <p class="text-center text-gray-500 text-xs">
-        &copy;2020 Acme Corp. All rights reserved.
+        &copy;2022 Fake Copyright. All rights reserved.
       </p>
     </div>
   </div>
 </template>
 
-<script>
-import { ref } from 'vue-demi'
-import { useUserStore } from '../store/user.js'
-import { useRouter } from 'vue-router'
+<script setup>
+import { useUserStore } from "../store/user.js";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
 
-export default {
-    //INIT
-  setup(){
-    const router = useRouter();
-    const user = useUserStore();
+//CONST
+const router = useRouter();
+const user = useUserStore();
 
-    const signUp = () => {
-        user.signUp(email.value, password.value);
-        router.push({
-        path: "/auth",
-      });
-    }
-    return{
-        router,
-        signUp,
-    }
-  }
+const email = ref(null);
+const password = ref(null);
 
-}
+//FUNCTIONS
+const signUp = () => {
+  user.signUp(email.value, password.value);
+  router.push({
+    path: "/auth",
+  });
+};
 </script>

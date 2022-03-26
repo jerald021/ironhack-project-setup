@@ -1,6 +1,7 @@
 <template>
-  <section>
-    <router-view class="app-main" />
+  <section class="">
+  <!-- <section class="bg-gray-700"> -->
+    <router-view class="app-main"/>
     <!-- your routes will load inside of these tags -->
   </section>
 </template>
