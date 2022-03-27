@@ -1,10 +1,10 @@
 <template>
   <div class="grid place-content-center my-5">
-    <h1 class="text-2xl text-blue-800">Welcome! This is the home page</h1>
-<br>
+    <h1 class="text-3xl">Welcome {{currentUser.email}}!</h1>
+    <br />
 
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+      <label class="block text-gray-700 text-2xl font-bold mb-2" for="username">
         Add new task
       </label>
       <input
@@ -19,7 +19,7 @@
     <div class="flex items-center justify-between">
       <button
         @click="newTask"
-        class="bg-slate-900 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        class="bg-stone-900 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-80"
         type="button"
       >
         New Task
@@ -30,37 +30,36 @@
       <thead>
         <tr>
           <th class="px-4 py-2">Task</th>
-          <th class="px-4 py-2">Action</th>
+          <th class="px-4 py-2 ">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="printTask in printTasks" :key="printTask.id">
-          <td class="border px-2 py-2 ">{{ printTask.title }}</td>
-          <td class="border px-2 py-2 grid place-content-center">
+          <td class="border px-4 py-2 font-semibold">{{ printTask.title }}</td>
+          <td class="border px-4 py-2 grid place-content-center">
             <div>
-              <button
+              <img
                 @click="edit"
-                class="bg-slate-900 hover:bg-slate-600 text-white font-bold my-1 mx-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline center " 
-                type="button"
-              >
-                Edit
-              </button>
+                class="w-8"
+                src="../assets/edit-interface-sign.png"
+                alt=""
+              />
+
               <br />
-              <button
+              <img
                 @click="complete"
-                class="bg-slate-900 hover:bg-slate-600 text-white font-bold my-1 mx-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Complete
-              </button>
+                class="w-8"
+                src="../assets/checked-symbol.png"
+                alt=""
+              />
+
               <br />
-              <button
+              <img
                 @click="deleteItem"
-                class="bg-slate-900 hover:bg-slate-600 text-white font-bold my-1 mx-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Delete
-              </button>
+                class="w-8"
+                src="../assets/cross-mark-on-a-black-circle-background.png"
+                alt=""
+              />
             </div>
           </td>
         </tr>
@@ -70,7 +69,7 @@
 
     <button
       @click="signOut"
-      class="bg-slate-900 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      class="bg-stone-900 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       type="submit"
     >
       Sign Out
@@ -88,14 +87,25 @@ const router = useRouter();
 const user = useUserStore();
 const task = useTaskStore();
 const newItem = ref("");
+const newTitle = ref("");
+const currentUser = ref([]);
 
 const printTasks = ref([]);
 
 const doTask = async () => {
   printTasks.value = await task.fetchTasks();
   return printTasks;
+  console.log(printTasks.value);
 };
+
+const getUser = async () => {
+  currentUser.value = await user.fetchUser();
+  // console.log(currentUser.value);
+  // return printTasks;
+};
+//CALLS
 doTask();
+getUser();
 
 // FUNCTIONS
 const signOut = () => {
@@ -105,7 +115,8 @@ const signOut = () => {
   });
 };
 const newTask = () => {
-  task.insertTask(newItem.value);
+  // console.log(user.fetchUser());
+  task.insertTask(newItem.value, currentUser.value);
   newItem.value = "";
   doTask();
 };
@@ -116,8 +127,7 @@ const complete = () => {
   console.log("this is complete");
 };
 const deleteItem = () => {
-  task.deleteTask();
-    doTask();
+  task.deleteTask(printTasks.value);
+  doTask();
 };
-
 </script>

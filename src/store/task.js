@@ -8,42 +8,43 @@ export const useTaskStore = defineStore("tasks", {
   state: () => ({
     tasks: null,
   }),
-  actions: {  
+  actions: {
     async fetchTasks() {
       const { data: tasks } = await supabase
         .from("tasks")
         .select("*")
         .order("id", { ascending: false });
-      // this.tasks = tasks;
-      //  allTodos.value = tasks;
-      //  console.log(allTodos.value);
-      //  return allTodos;
-       return tasks;
+      return tasks;
     },
-    async insertTask(item) {
+    async insertTask(name, user) {
+      console.log(user);
       const { data, error } = await supabase.from("tasks").insert([
         {
-          user_id: "7d7c45f3-5fbc-4a7c-ba46-0318e95ba668",
-          title: item,
+          user_id: user.id,
+          title: name,
           is_complete: false,
         },
       ]);
       // fetchTasks();
     },
-    async updateTask(title) {
+    async updateTask(name, id) {
       const { data, error } = await supabase.from("tasks").update({
-        user_id: "7d7c45f3-5fbc-4a7c-ba46-0318e95ba668",
-        title: title,
-      });
+        title: name,
+      })
+      .eq(id, this.id)
     },
-    async deleteTask(id) {
-      const { data, error } = await supabase
-        .from("tasks")
-        .delete()
-        .match({ id: 46 });
-        console.log(
-          'item deleted'
-        );
+    
+    async deleteTask(item) {
+      try {
+        const { data, error } = await supabase
+          .from("tasks")
+          .delete()
+          .match({ id: item.id });
+        console.log("item deleted");
+        if(error) throw error;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

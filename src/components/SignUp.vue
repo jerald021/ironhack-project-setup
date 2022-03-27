@@ -1,6 +1,6 @@
 <template>
   <div class="grid place-content-center my-5">
-    <h2 class="text-2xl text-blue-800">Sign Up</h2>
+    <h2 class="text-4xl my-5 grid place-content-center">Sign Up</h2>
     <div class="w-full max-w-xs">
       <form
         @submit.prevent="formSubmit"
@@ -40,14 +40,14 @@
         <div class="flex items-center justify-between">
           <button
             @click="signUp"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-stone-900 hover:bg-stone-700 text-white font-bold my-1 mx-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline center"
             type="submit"
           >
             Sign Up
           </button>
           <button
             @click="router.push('/auth')"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-stone-900 hover:bg-stone-700 text-white font-bold my-1 mx-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline center"
             type="submit"
           >
             Back
