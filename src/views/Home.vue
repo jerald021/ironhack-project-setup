@@ -1,6 +1,6 @@
 <template>
   <div class="grid place-content-center my-5">
-    <h1 class="text-3xl">Welcome {{currentUser.email}}!</h1>
+    <h1 class="text-3xl">Welcome {{ user.user.email }}!</h1>
     <br />
 
     <div class="mb-4">
@@ -19,28 +19,39 @@
     <div class="flex items-center justify-between">
       <button
         @click="newTask"
-        class="bg-stone-900 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-80"
+        class="bg-stone-900 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         type="button"
       >
         New Task
       </button>
     </div>
 
-    <table class="table-auto my-12">
+    <table v-if="user.user" class="table-auto my-12">
       <thead>
         <tr>
           <th class="px-4 py-2">Task</th>
-          <th class="px-4 py-2 ">Action</th>
+          <th class="px-4 py-2">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="printTask in printTasks" :key="printTask.id">
-          <td class="border px-4 py-2 font-semibold">{{ printTask.title }}</td>
+          <td class="border px-4 py-2 font-semibold text-1xl">
+            <input
+              v-if="editMode"
+              v-model="printTask.title"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="editTitle"
+              type="text"
+              placeholder="Task..."
+            />
+            <h2 v-else>{{ printTask.title }}</h2>            
+          </td>
+          <!-- ACTION BUTTONS  -->
           <td class="border px-4 py-2 grid place-content-center">
             <div>
               <img
                 @click="edit"
-                class="w-8"
+                class="w-8 hover:cursor-pointer"
                 src="../assets/edit-interface-sign.png"
                 alt=""
               />
@@ -48,7 +59,7 @@
               <br />
               <img
                 @click="complete"
-                class="w-8"
+                class="w-8 hover:cursor-pointer"
                 src="../assets/checked-symbol.png"
                 alt=""
               />
@@ -56,7 +67,7 @@
               <br />
               <img
                 @click="deleteItem"
-                class="w-8"
+                class="w-8 hover:cursor-pointer"
                 src="../assets/cross-mark-on-a-black-circle-background.png"
                 alt=""
               />
@@ -65,6 +76,7 @@
         </tr>
       </tbody>
     </table>
+
     <br />
 
     <button
@@ -83,48 +95,52 @@ import { useTaskStore } from "../store/task.js";
 import { useRouter } from "vue-router";
 import { ref, reactive, computed } from "vue";
 
+//SYSTEM
 const router = useRouter();
 const user = useUserStore();
 const task = useTaskStore();
+
+//CUSTOM
+const printTasks = ref([]);
 const newItem = ref("");
 const newTitle = ref("");
-const currentUser = ref([]);
-
-const printTasks = ref([]);
+const editMode = ref(null);
+const tasksCompleted = ref([]);
 
 const doTask = async () => {
   printTasks.value = await task.fetchTasks();
-  return printTasks;
-  console.log(printTasks.value);
-};
-
-const getUser = async () => {
-  currentUser.value = await user.fetchUser();
-  // console.log(currentUser.value);
   // return printTasks;
+  //console.log(printTasks.value);
 };
 //CALLS
 doTask();
-getUser();
+// console.log(user.user);
+// console.log(printTasks.value);
+// console.log(task.tasks[0]);
 
 // FUNCTIONS
 const signOut = () => {
-  user.signOut();
-  router.push({
-    path: "/auth",
-  });
+  if (user.signOut()) {
+    router.push({
+      path: "/auth",
+    });
+  }
 };
 const newTask = () => {
-  // console.log(user.fetchUser());
-  task.insertTask(newItem.value, currentUser.value);
+  task.insertTask(newItem.value, user.user);
   newItem.value = "";
   doTask();
 };
 const edit = () => {
-  task.updateTask(newTitle.value);
+  editMode.value = !editMode.value;
+  // console.log(editMode.value);
+
+  // task.updateTask(newTitle.value);
+  // doTask();
 };
 const complete = () => {
   console.log("this is complete");
+  doTask();
 };
 const deleteItem = () => {
   task.deleteTask(printTasks.value);

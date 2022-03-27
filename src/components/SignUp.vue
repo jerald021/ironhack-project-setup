@@ -54,9 +54,6 @@
           </button>
         </div>
       </form>
-      <p class="text-center text-gray-500 text-xs">
-        &copy;2022 Fake Copyright. All rights reserved.
-      </p>
     </div>
   </div>
 </template>
