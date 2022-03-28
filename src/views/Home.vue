@@ -60,8 +60,8 @@
               <br />
               <img
                 @click="complete(printTask)"
-                class="w-8 hover:cursor-pointer"
-                src="../assets/checked-symbol.png"
+                class="w-8 hover:cursor-pointer background1"
+                src="../assets/task-fill-svgrepo-com.svg"
                 alt=""
               />
 
@@ -152,3 +152,12 @@ const deleteItem = async (item) => {
   await doTask();
 };
 </script>
+
+<style>
+/* .background1{
+  background-color: blue;
+} */
+.background2{
+  background-color: green;
+}
+</style>
