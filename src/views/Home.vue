@@ -34,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="printTask in printTasks" :key="printTask.id">
+        <tr v-for="(printTask, index) in printTasks" :key="printTask.id">
           <td class="border px-4 py-2 font-semibold text-1xl">
             <input
               v-if="editMode"
@@ -46,11 +46,12 @@
             />
             <h2 v-else>{{ printTask.title }}</h2>            
           </td>
+
           <!-- ACTION BUTTONS  -->
           <td class="border px-4 py-2 grid place-content-center">
             <div>
               <img
-                @click="edit"
+                @click="edit(printTask)"
                 class="w-8 hover:cursor-pointer"
                 src="../assets/edit-interface-sign.png"
                 alt=""
@@ -58,7 +59,7 @@
 
               <br />
               <img
-                @click="complete"
+                @click="complete(index)"
                 class="w-8 hover:cursor-pointer"
                 src="../assets/checked-symbol.png"
                 alt=""
@@ -66,7 +67,7 @@
 
               <br />
               <img
-                @click="deleteItem"
+                @click="deleteItem(index)"
                 class="w-8 hover:cursor-pointer"
                 src="../assets/cross-mark-on-a-black-circle-background.png"
                 alt=""
@@ -131,12 +132,14 @@ const newTask = () => {
   newItem.value = "";
   doTask();
 };
-const edit = () => {
+const edit = (item) => {
+  // console.log(item);
+  // console.log(index);
+  //  console.log(newitem.value);
   editMode.value = !editMode.value;
   // console.log(editMode.value);
-
-  // task.updateTask(newTitle.value);
-  // doTask();
+  task.updateTask(item.title, item.id);
+  doTask();
 };
 const complete = () => {
   console.log("this is complete");

@@ -23,11 +23,13 @@ export const useTaskStore = defineStore("tasks", {
         },
       ]);
     },
-    async updateTask(name, id) {
-      const { data, error } = await supabase.from("tasks").update({
+    async updateTask(name, index) {
+      // console.log(name);
+      //  console.log(index);
+      const { error } = await supabase.from("tasks").update({
         title: name,
       })
-      .eq(id, this.id)
+      .match({id: index})
     },
     
     async deleteTask(item) {
