@@ -1,8 +1,5 @@
 import { defineStore } from "pinia";
 import { supabase } from "../supabase";
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 export const useUserStore = defineStore("user", {
   state: () => ({

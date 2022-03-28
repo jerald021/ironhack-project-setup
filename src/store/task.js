@@ -19,7 +19,7 @@ export const useTaskStore = defineStore("tasks", {
         {
           user_id: user.id,
           title: name,
-          is_complete: false,
+          is_complete: null,
         },
       ]);
     },
@@ -39,15 +39,14 @@ export const useTaskStore = defineStore("tasks", {
       })
       .match({id: index})
       
-    },
-    
+    },    
     async deleteTask(item) {
       try {
         const { error } = await supabase
           .from("tasks")
           .delete()
           .match({ id: item});
-        console.log("item deleted");
+        // console.log("item deleted");
         if(error) throw error;
       } catch (error) {
         console.log(error);
