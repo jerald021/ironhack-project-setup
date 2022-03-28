@@ -44,7 +44,7 @@
               type="text"
               placeholder="Task..."
             />
-            <h2 v-else>{{ printTask.title }}</h2>            
+            <h2 class="flex flex-col items-center" v-else>{{ printTask.title }}</h2>            
           </td>
 
           <!-- ACTION BUTTONS  -->
@@ -52,14 +52,14 @@
             <div>
               <img
                 @click="edit(printTask)"
-                class="w-8 hover:cursor-pointer"
+                class="w-8 hover:cursor-pointer shadow-md"
                 src="../assets/edit-interface-sign.png"
                 alt=""
               />
 
               <br />
               <img
-                @click="complete(index)"
+                @click="complete(printTask)"
                 class="w-8 hover:cursor-pointer"
                 src="../assets/checked-symbol.png"
                 alt=""
@@ -67,7 +67,7 @@
 
               <br />
               <img
-                @click="deleteItem(index)"
+                @click="deleteItem(printTask)"
                 class="w-8 hover:cursor-pointer"
                 src="../assets/cross-mark-on-a-black-circle-background.png"
                 alt=""
@@ -104,9 +104,8 @@ const task = useTaskStore();
 //CUSTOM
 const printTasks = ref([]);
 const newItem = ref("");
-const newTitle = ref("");
 const editMode = ref(null);
-const tasksCompleted = ref([]);
+const tasksCompleted = ref(null);
 
 const doTask = async () => {
   printTasks.value = await task.fetchTasks();
@@ -127,26 +126,29 @@ const signOut = () => {
     });
   }
 };
-const newTask = () => {
+const newTask = async () => {
   task.insertTask(newItem.value, user.user);
   newItem.value = "";
   doTask();
 };
-const edit = (item) => {
+const edit = async (item) => {
   // console.log(item);
   // console.log(index);
   //  console.log(newitem.value);
   editMode.value = !editMode.value;
   // console.log(editMode.value);
   task.updateTask(item.title, item.id);
-  doTask();
+  await doTask();
 };
-const complete = () => {
-  console.log("this is complete");
-  doTask();
+const complete = async (item) => {
+    // console.log(item.is_complete);
+  item.is_complete = !item.is_complete;
+  // console.log(item.is_complete, item.id);
+   task.isCompleted(item.is_complete, item.id);
+  await doTask();
 };
-const deleteItem = () => {
-  task.deleteTask(printTasks.value);
-  doTask();
+const deleteItem = async (item) => {
+  task.deleteTask(item.id);
+  await doTask();
 };
 </script>

@@ -31,13 +31,22 @@ export const useTaskStore = defineStore("tasks", {
       })
       .match({id: index})
     },
+    async isCompleted(boolean, index) {
+      // console.log(boolean);
+      // console.log(index);
+      const { error } = await supabase.from("tasks").update({
+        is_complete: boolean,
+      })
+      .match({id: index})
+      
+    },
     
     async deleteTask(item) {
       try {
         const { error } = await supabase
           .from("tasks")
           .delete()
-          .match({ id: item.id });
+          .match({ id: item});
         console.log("item deleted");
         if(error) throw error;
       } catch (error) {
