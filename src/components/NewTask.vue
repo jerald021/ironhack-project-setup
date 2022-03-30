@@ -29,16 +29,20 @@
 import { useUserStore } from "../store/user.js";
 import { useTaskStore } from "../store/task.js";
 import { ref } from "vue";
+// import doTask from './TaskItem.vue';
 
 const task = useTaskStore();
 const user = useUserStore();
 const newItem = ref("");
+// const test = doTask();
+// console.log(test);
 
 const newTask = async () => {
   if (task.insertTask(newItem.value, user.user)) {
     newItem.value = "";
     // await doTask();
     Swal.fire({
+      toast: false,
       title: "New Task Created!",
       iconColor: "#3085d6",
       position: "center",

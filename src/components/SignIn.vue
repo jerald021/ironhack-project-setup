@@ -7,10 +7,7 @@
         class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div class="mb-4">
-          <label
-            class="block text-gray-700 text-sm font-bold mb-2"
-            for="email"
-          >
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
             Email
           </label>
           <input
@@ -65,7 +62,7 @@ import { useTaskStore } from "../store/task.js";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
-//VARS 
+//VARS
 const router = useRouter();
 const user = useUserStore();
 
@@ -87,6 +84,24 @@ const signIn = async () => {
       path: "/",
     });
     await doTask();
+    console.log('im in');
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      // iconColor: "#fff",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Signed in successfully",
+      iconColor: "#3085d6",
+    });
   }
 };
 </script>

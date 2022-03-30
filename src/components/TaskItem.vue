@@ -71,6 +71,7 @@ const editMode = ref(null);
 const doTask = async () => {
   printTasks.value = await task.fetchTasks();
   // console.log(printTasks.value);
+  return printTasks.value;
 };
 // FUNCTIONS
 doTask();
@@ -100,14 +101,16 @@ const deleteItem = async (item) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       await task.deleteTask(item.id);
-      Swal.fire(
-        "Deleted!", "Your task has been deleted.", "success"
-        
-        );
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your task has been deleted.",
+        iconColor: "#3085d6",
+        icon: "success",
+        confirmButtonColor: "#000",
+        confirmButtonText: "OK",
+        width: 600,
+      });
 
-      
-
-        
       await doTask();
     }
   });
