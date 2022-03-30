@@ -17,7 +17,7 @@
             type="text"
             placeholder="Task..."
           />
-          <h2  v-else class="flex flex-col items-center">
+          <h2 v-else class="flex flex-col items-center">
             {{ printTask.title }}
           </h2>
         </td>
@@ -76,18 +76,40 @@ const doTask = async () => {
 doTask();
 
 const edit = async (item) => {
+  // console.log(item.id);
   editMode.value = !editMode.value;
   task.updateTask(item.title, item.id);
-   doTask();
+  doTask();
 };
 const complete = async (item) => {
   item.is_complete = !item.is_complete;
   console.log(item.is_complete);
   task.isCompleted(item.is_complete, item.id);
-   doTask();
+  doTask();
 };
 const deleteItem = async (item) => {
-  useTaskStore().deleteTask(item.id);
-   doTask();
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#000",
+    iconColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      await task.deleteTask(item.id);
+      Swal.fire(
+        "Deleted!", "Your task has been deleted.", "success"
+        
+        );
+
+      
+
+        
+      await doTask();
+    }
+  });
 };
 </script>

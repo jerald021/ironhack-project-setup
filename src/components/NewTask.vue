@@ -35,8 +35,23 @@ const user = useUserStore();
 const newItem = ref("");
 
 const newTask = async () => {
-  task.insertTask(newItem.value, user.user);
-  newItem.value = "";
-  // await doTask();
+  if (task.insertTask(newItem.value, user.user)) {
+    newItem.value = "";
+    // await doTask();
+    Swal.fire({
+      title: "New Task Created!",
+      iconColor: "#3085d6",
+      position: "center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
+  }
 };
 </script>

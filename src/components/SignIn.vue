@@ -60,6 +60,7 @@
 
 <script setup>
 import { useUserStore } from "../store/user.js";
+import { useTaskStore } from "../store/task.js";
 
 import { useRouter } from "vue-router";
 import { ref } from "vue";
@@ -68,15 +69,24 @@ import { ref } from "vue";
 const router = useRouter();
 const user = useUserStore();
 
+const task = useTaskStore();
+const printTasks = ref([]);
+
 const email = ref(null);
 const password = ref(null);
 
 //METHODS
-const signIn = () => {
+const doTask = async () => {
+  printTasks.value = await task.fetchTasks();
+  // console.log(printTasks.value);
+};
+// FUNCTIONS
+const signIn = async () => {
   if (user.signIn(email.value, password.value)) {
     router.push({
       path: "/",
     });
+    await doTask();
   }
 };
 </script>

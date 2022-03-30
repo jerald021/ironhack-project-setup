@@ -8,18 +8,25 @@
   </head>
   <body class="background bg-neutral-400">
     <div class="" id="app"></div>
+
     <script type="module" src="/src/main.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.all.min.js"></script>
   </body>
   <footer>
-  <p class="text-center text-xs">
-    &copy;2022 Fake Copyright. All rights reserved.
-  </p>
-</footer>
+    <p class="text-center text-xs">
+      &copy;2022 Fake Copyright. All rights reserved.
+    </p>
+  </footer>
 </html>
-<!-- <style>
-   .background{
-  background-color: red !important;
-  background-image: url('./src/assets/b1.jpg');
-  /* opacity: 0.2; */
-} 
-</style> -->
+<style>
+  .background {
+    /* background-image: url('./src/assets/b1.jpg'); */
+    background-size: cover;
+    background-position: center center;
+    background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    );
+  }
+</style>
