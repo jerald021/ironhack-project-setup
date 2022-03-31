@@ -1,5 +1,5 @@
 <template>
-  <div class="grid place-content-center my-5">
+  <div class=" grid place-content-center my-5">
     <h1 class="text-3xl">Welcome {{ user.user.email }}!</h1>
 
     <TaskItem />
@@ -34,3 +34,6 @@ const signOut = () => {
   }
 };
 </script>
+<style>
+
+</style>
