@@ -1,4 +1,29 @@
 <template>
+  <div class="my-6">
+    <div class="mb-4">
+      <label class="hidden text-gray-700 text-2xl font-bold mb-2" for="task">
+        Add new task
+      </label>
+      <input
+        v-model="newItem"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="task"
+        type="text"
+        placeholder="Task name..."
+      />
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button
+        @click="newTask"
+        class="bg-stone-900 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="button"
+      >
+        New Task
+      </button>
+    </div>
+  </div>
+
   <table class="table-auto my-12">
     <thead>
       <tr>
@@ -25,7 +50,7 @@
         <!-- ACTION BUTTONS  -->
         <td class="border px-4 py-1 grid place-content-center">
           <div class="flex flex-row">
-            <img
+            <img  
               @click="edit(printTask)"
               class="w-7 hover:cursor-pointer py-1 mx-1"
               src="../assets/edit-interface-sign.png"
@@ -62,31 +87,63 @@
 
 <script setup>
 import { useTaskStore } from "../store/task.js";
+import { useUserStore } from "../store/user.js";
+import { onMounted } from "vue";
+
 import { ref } from "vue";
 
 const task = useTaskStore();
+const user = useUserStore();
+
 const printTasks = ref([]);
 const editMode = ref(null);
+const newItem = ref("");
+
+onMounted(() => {});
 
 const doTask = async () => {
   printTasks.value = await task.fetchTasks();
   // console.log(printTasks.value);
-  return printTasks.value;
+  // return printTasks.value;
+  // console.log(printTasks.value);
 };
-// FUNCTIONS
+// ON LOAD THE PAGE SHOW THE TASKS
 doTask();
 
+// FUNCTIONS
+const newTask = async () => {
+  if (task.insertTask(newItem.value, user.user)) {
+    await doTask();
+    newItem.value = "";
+
+    Swal.fire({
+      toast: false,
+      title: "New Task Created!",
+      iconColor: "#3085d6",
+      position: "center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
+  }
+};
 const edit = async (item) => {
   // console.log(item.id);
   editMode.value = !editMode.value;
   task.updateTask(item.title, item.id);
-  doTask();
+  await doTask();
 };
 const complete = async (item) => {
   item.is_complete = !item.is_complete;
   console.log(item.is_complete);
   task.isCompleted(item.is_complete, item.id);
-  doTask();
+  await doTask();
 };
 const deleteItem = async (item) => {
   Swal.fire({

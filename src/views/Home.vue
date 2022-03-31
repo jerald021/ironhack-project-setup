@@ -1,8 +1,7 @@
 <template>
   <div class="grid place-content-center my-5">
-    
-    <AppHeader />
-    <NewTask />
+    <h1 class="text-3xl">Welcome {{ user.user.email }}!</h1>
+
     <TaskItem />
 
     <button

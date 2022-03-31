@@ -34,8 +34,16 @@ import { ref } from "vue";
 const task = useTaskStore();
 const user = useUserStore();
 const newItem = ref("");
+const printTasks = ref([]);
+
 // const test = doTask();
 // console.log(test);
+const doTask = async () => {
+  printTasks.value = await task.fetchTasks();
+  // console.log(printTasks.value);
+  return printTasks.value;
+};
+// FUNCTIONS
 
 const newTask = async () => {
   if (task.insertTask(newItem.value, user.user)) {
@@ -57,5 +65,7 @@ const newTask = async () => {
       },
     });
   }
+  doTask();
+
 };
 </script>
